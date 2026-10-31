@@ -11,7 +11,7 @@ echo "----------------------------"
 ## 1 - JDK
 echo "Installing OpenJDK 25 :"
 echo "----------------------------"
-sudo dnf install java-25-openjdk
+sudo dnf install -y java-25-openjdk
 
 ## 2 - Antrl Jar
 echo "Installing Antlr4 jar:"
@@ -26,13 +26,17 @@ else
     echo "ANTLR JAR already exists. Skipping download."
 fi
 
-## 3- Configure Bash
-cat >> ~/.bashrc <<'EOF'
+## 3 - Configure Bash
+if ! grep -qF '# ANTLR 4.13.2' ~/.bashrc; then
+    cat >> ~/.bashrc <<'EOF'
 
 # ANTLR 4.13.2
 alias antlr4='java -jar /usr/local/lib/antlr-4.13.2-complete.jar'
 alias grun='java org.antlr.v4.gui.TestRig'
 export CLASSPATH=".:/usr/local/lib/antlr-4.13.2-complete.jar"
 EOF
+else
+    echo "ANTLR Bash configuration already exists. Skipping."
+fi
 
 echo "=== Installation complete ==="
