@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "ANTLR: Generate Java",
+            "type": "process",
+            "command": "java",
+            "args": [
+                "-jar",
+                "/usr/local/lib/antlr-4.13.2-complete.jar",
+                "-Dlanguage=Java",
+                "-o",
+                "${workspaceFolder}/generated",
+                "${file}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

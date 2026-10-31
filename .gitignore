@@ -1,0 +1,20 @@
+# ANTLR generated files
+generated/
+
+# Java build output
+*.class
+bin/
+out/
+build/
+target/
+
+# VS Code
+.vscode/*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# ANTLR extension cache
+**/.antlr/
+
