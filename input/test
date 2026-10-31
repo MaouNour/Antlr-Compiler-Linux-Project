@@ -1,6 +1,1 @@
-Hello
-Greetings
-John
-Alice
-Hello World
-Greetings Everyone
+let x = "Hello"
