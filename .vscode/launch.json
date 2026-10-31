@@ -3,23 +3,15 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Main",
+            "name": "Run Main",
             "request": "launch",
-            "mainClass": "Main",
-            "projectName": "test_c25a482"
+            "mainClass": "Main"
         },
         {
             "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
-        },
-        {
-            "type": "java",
-            "name": "Run Main",
-            "request": "launch",
-            "mainClass": "Main",
-            "projectName": "Antlr_7c18ac1f"
         }
     ]
 }
