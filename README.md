@@ -1,58 +1,107 @@
 
-# ANTLR4 Java Development Environment
+# ANTLR4 Development Environment
 
-A simple ANTLR4 development environment using Java 25 and ANTLR 4.13.2 on Fedora Linux, integrated with Visual Studio Code.
+A cross-platform ANTLR4 development environment for Java projects using ANTLR 4.13.2.
+
+Supports:
+- Fedora and other major Linux distributions
+- Windows
+- Visual Studio Code
 
 ## Requirements
 
-- Fedora Linux
 - Java JDK 25
 - ANTLR 4.13.2
 - Visual Studio Code
-- Extension: Java Extension Pack
-- Extension: ANTLR4 grammar support
+- Java Extension Pack
+- ANTLR4 grammar support extension
 
 ## 1. Installation
 
-Clone or download this project, then execute the installation script:
+### Linux
+
+Run the installation script:
 
 ```bash
 chmod +x install.sh
 ./install.sh
 ```
 
-The script performs the following:
+The script:
 
-1. Installs OpenJDK 25 using DNF.
+1. Installs OpenJDK 25 using the available package manager.
 2. Downloads ANTLR 4.13.2.
 3. Installs the ANTLR JAR at:
 
    `/usr/local/lib/antlr-4.13.2-complete.jar`
 
-4. Configures the following commands in `~/.bashrc`:
+4. Adds ANTLR commands and CLASSPATH to `~/.bashrc`.
 
-| Command | Description |
-|---------|-------------|
-| `antlr4` | Runs the ANTLR tool |
-| `grun` | Runs ANTLR TestRig |
-| `CLASSPATH` | Makes ANTLR runtime classes available to Java |
-
-After installation, reload Bash:
+Reload Bash:
 
 ```bash
 source ~/.bashrc
 ```
 
+### Windows
+
+First, install Java JDK 25 manually and make sure Java is available in PATH.
+
+Then run:
+
+```batch
+install.bat
+```
+
+The script:
+
+1. Downloads ANTLR 4.13.2.
+2. Installs it under `%USERPROFILE%\antlr`.
+3. Configures ANTLR_HOME and CLASSPATH.
+4. Creates `antlr4` and `grun` helper commands.
+5. Adds the helper directory to the user PATH.
+
+Restart your terminal and VS Code after installation.
+
 ## 2. VS Code Setup
 
-Install the required extensions:
+Install the following extensions:
 
 - Java Extension Pack
 - ANTLR4 grammar support
 
-The project already contains local VS Code configurations under `.vscode/`.
+The project includes local VS Code configurations in `.vscode/`.
 
-The Java configuration includes the ANTLR JAR as a referenced library, so generated Java files can access the ANTLR runtime.
+### Configure the ANTLR JAR
+
+Open `.vscode/settings.json`.
+
+For Linux:
+
+```json
+"java.project.referencedLibraries": [
+    "/usr/local/lib/antlr-4.13.2-complete.jar"
+]
+```
+
+For Windows:
+
+```json
+"java.project.referencedLibraries": [
+    "C:/Users/YOUR_USERNAME/antlr/antlr-4.13.2-complete.jar"
+]
+```
+
+Replace `YOUR_USERNAME` with your Windows username.
+
+The source paths should include:
+
+```json
+"java.project.sourcePaths": [
+    "src",
+    "generated"
+]
+```
 
 No global VS Code settings are required.
 
@@ -66,25 +115,76 @@ To generate Java files:
 2. Press `Ctrl + Shift + B`.
 3. Select `ANTLR: Generate Java` if prompted.
 
-ANTLR will generate the corresponding Java files inside:
+Generated Java files will be placed inside:
 
 ```text
 generated/
 ```
 
-You can repeat this whenever you modify a grammar.
+Repeat this whenever you modify a grammar.
 
 ## 4. Running the Java Program
 
-Open `Main.java` and use the VS Code Run button or the Run and Debug panel.
+Open `Main.java` and use the VS Code Run button or Run and Debug panel.
 
-The Java project is configured to recognize:
+The Java project recognizes:
 
 - `src/` - Main Java source files.
-- `generated/` - ANTLR generated Java files.
-- ANTLR runtime JAR - Required library.
+- `generated/` - ANTLR-generated Java files.
+- ANTLR runtime JAR - Required runtime library.
 
-## 5. Project Structure
+## 5. Useful Commands
+
+### Generate Java files manually
+
+Linux and Windows (after configuring ANTLR):
+
+```bash
+antlr4 -Dlanguage=Java -o generated grammar/MyLexer.g4
+```
+
+### Compile Java files
+
+Linux:
+
+```bash
+javac -cp ".:/usr/local/lib/antlr-4.13.2-complete.jar" \
+    -d bin src/*.java generated/*.java
+```
+
+Windows:
+
+```batch
+javac -cp ".;%USERPROFILE%\antlr\antlr-4.13.2-complete.jar" -d bin src\*.java generated\*.java
+```
+
+### Run the program
+
+Linux:
+
+```bash
+java -cp "bin:/usr/local/lib/antlr-4.13.2-complete.jar" Main
+```
+
+Windows:
+
+```batch
+java -cp "bin;%USERPROFILE%\antlr\antlr-4.13.2-complete.jar" Main
+```
+
+### Check Java
+
+```bash
+java -version
+```
+
+### Run ANTLR
+
+```bash
+antlr4
+```
+
+## 6. Project Structure
 
 ```text
 project/
@@ -106,43 +206,20 @@ project/
 │   └── input.js
 │
 ├── install.sh
+├── install.bat
 ├── .gitignore
 └── README.md
 ```
 
-## 6. Useful Commands
+## 7. Git
 
-Generate Java files manually:
+Generated files are build artifacts.
 
-```bash
-antlr4 -Dlanguage=Java -o generated grammar/MyLexer.g4
-```
+The `.g4` grammar files are the source of truth and should be committed to Git.
 
-Compile Java files:
-
-```bash
-javac -cp ".:/usr/local/lib/antlr-4.13.2-complete.jar" \
-    -d bin src/*.java generated/*.java
-```
-
-Run the program:
-
-```bash
-java -cp "bin:/usr/local/lib/antlr-4.13.2-complete.jar" Main
-```
-
-Check Java installation:
-
-```bash
-java -version
-```
-
-Check ANTLR:
-
-```bash
-antlr4
-```
+Generated Java files, compiled classes, and temporary ANTLR extension files should generally be ignored.
 
 ---
 
-**Note:** Generated Java files are build artifacts. The `.g4` grammar files are the source of truth and should be committed to Git.
+**ANTLR Version:** 4.13.2  
+**Java Version:** 25
